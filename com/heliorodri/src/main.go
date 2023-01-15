@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"strconv"
@@ -32,19 +33,23 @@ func allArticles(writer http.ResponseWriter, request *http.Request) {
 
 func findArticleById(writer http.ResponseWriter, request *http.Request) {
 	vars := mux.Vars(request)
-	id := vars["id"]
-	int_id, error := strconv.Atoi(id)
+	id, error := strconv.Atoi(vars["id"])
 
 	if error != nil {
 		panic(error)
 	}
 
 	for _, article := range articles {
-		if article.Id == int_id {
+		if article.Id == id {
 			json.NewEncoder(writer).Encode(article)
 		}
 	}
 
+}
+
+func createArticle(w http.ResponseWriter, r *http.Request) {
+	body, _ := ioutil.ReadAll(r.Body)
+	fmt.Fprintf(w, "%+v", string(body))
 }
 
 func homePage(writer http.ResponseWriter, request *http.Request) {
@@ -56,6 +61,7 @@ func handleRequest() {
 
 	myRouter.HandleFunc("/", homePage)
 	myRouter.HandleFunc("/articles", allArticles)
+	myRouter.HandleFunc("/articles", allArticles).Methods("POST")
 	myRouter.HandleFunc("/articles/{id}", findArticleById)
 
 	log.Fatal(http.ListenAndServe(":10000", myRouter))
