@@ -60,8 +60,8 @@ func handleRequest() {
 	myRouter := mux.NewRouter().StrictSlash(true)
 
 	myRouter.HandleFunc("/", homePage)
+	myRouter.HandleFunc("/articles", createArticle).Methods("POST")
 	myRouter.HandleFunc("/articles", allArticles)
-	myRouter.HandleFunc("/articles", allArticles).Methods("POST")
 	myRouter.HandleFunc("/articles/{id}", findArticleById)
 
 	log.Fatal(http.ListenAndServe(":10000", myRouter))
