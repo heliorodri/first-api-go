@@ -18,7 +18,9 @@ type Article struct {
 	Content string `json:"content"`
 }
 
-var articles = [4]Article{
+type Articles []Article
+
+var articles = Articles{
 	{Id: 1, Title: "Title one", Desc: "Desc one", Content: "Content one"},
 	{Id: 2, Title: "Title two", Desc: "Desc two", Content: "Content Two"},
 	{Id: 3, Title: "Title three", Desc: "Desc three", Content: "Content three"},
@@ -49,7 +51,14 @@ func findArticleById(writer http.ResponseWriter, request *http.Request) {
 
 func createArticle(w http.ResponseWriter, r *http.Request) {
 	body, _ := ioutil.ReadAll(r.Body)
-	fmt.Fprintf(w, "%+v", string(body))
+
+	var article Article
+
+	json.Unmarshal(body, &article)
+
+	articles = append(articles, article)
+
+	json.NewEncoder(w).Encode(article)
 }
 
 func homePage(writer http.ResponseWriter, request *http.Request) {
