@@ -1,4 +1,4 @@
-module FIRST-API-GO
+module first_api_go
 
 go 1.19
 
