@@ -61,6 +61,17 @@ func createArticle(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(article)
 }
 
+func deleteArticle(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id, _ := strconv.Atoi(vars["id"])
+
+	for index, article := range articles {
+		if article.Id == id {
+			articles = append(articles[:index], articles[index+1:]...)
+		}
+	}
+}
+
 func homePage(writer http.ResponseWriter, request *http.Request) {
 	fmt.Fprint(writer, "Homepage endpoint hit")
 }
@@ -71,6 +82,7 @@ func handleRequest() {
 	myRouter.HandleFunc("/", homePage)
 	myRouter.HandleFunc("/articles", createArticle).Methods("POST")
 	myRouter.HandleFunc("/articles", allArticles)
+	myRouter.HandleFunc("/articles/{id}", deleteArticle).Methods("DELETE")
 	myRouter.HandleFunc("/articles/{id}", findArticleById)
 
 	log.Fatal(http.ListenAndServe(":10000", myRouter))
