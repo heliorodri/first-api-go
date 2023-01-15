@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 	"strconv"
@@ -50,7 +50,7 @@ func findArticleById(writer http.ResponseWriter, request *http.Request) {
 }
 
 func createArticle(w http.ResponseWriter, r *http.Request) {
-	body, _ := ioutil.ReadAll(r.Body)
+	body, _ := io.ReadAll(r.Body)
 
 	var article Article
 
@@ -62,7 +62,7 @@ func createArticle(w http.ResponseWriter, r *http.Request) {
 }
 
 func updateArticle(w http.ResponseWriter, r *http.Request) {
-	body, _ := ioutil.ReadAll(r.Body)
+	body, _ := io.ReadAll(r.Body)
 	id, _ := strconv.Atoi(mux.Vars(r)["id"])
 
 	var article Article
