@@ -1,4 +1,4 @@
-# HOW TO RUN AND TEST IT 
+# [work in progress] RUN AND TEST IT STEPS 
 [work in progress]- next step: database connection
 
 ## Get all articles
